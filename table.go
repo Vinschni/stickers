@@ -3,13 +3,14 @@ package stickers
 import (
 	"errors"
 	"fmt"
-	"github.com/charmbracelet/lipgloss"
 	"log"
 	"math"
 	"reflect"
 	"strconv"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 var (
@@ -335,6 +336,12 @@ func (r *Table) CursorRight() *Table {
 // GetCursorLocation returns the current x,y position of the cursor
 func (r *Table) GetCursorLocation() (int, int) {
 	return r.cursorIndexX, r.cursorIndexY
+}
+
+// GetCursorLocation returns the current x,y position of the cursor
+func (r *Table) SetCursorLocation(x int, y int) {
+	r.cursorIndexX = clamp(x, 0, len(r.columnHeaders))
+	r.cursorIndexY = clamp(y, 0, len(r.filteredRows))
 }
 
 // GetCursorValue returns the string of the cell under the cursor
@@ -839,4 +846,14 @@ func sortIndex[T Ordered](slice []T, order TableSortingOrderKey) []int {
 		}
 	}
 	return index
+}
+
+func clamp(v int, low int, hi int) int {
+	if v <= low {
+		return low
+	}
+	if v >= hi {
+		return hi
+	}
+	return v
 }
