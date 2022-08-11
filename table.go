@@ -437,9 +437,13 @@ func (r *Table) Render() string {
 	r.updateRows()
 	r.updateHeader()
 
+	var xStr = fmt.Sprint(r.cursorIndexX)
+	if len(r.columnHeaders) >= r.cursorIndexX && len(r.columnHeaders[r.cursorIndexX]) > 0 {
+		xStr = r.columnHeaders[r.cursorIndexX]
+	}
 	statusMessage := fmt.Sprintf(
-		"%d:%d / %d:%d ",
-		r.cursorIndexX,
+		"%s:%d / %d:%d ",
+		xStr,
 		r.cursorIndexY,
 		r.rowsBox.GetWidth(),
 		r.rowsBox.GetHeight(),
